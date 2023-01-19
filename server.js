@@ -32,6 +32,19 @@ app.get("/notes", function (req, res) {
     res.sendFile(path.join(publicDir, "index.html"));
   });
 
+  app.post("/api/notes", function (req, res) {
+    let myNotes = JSON.parse(fs.readFileSync("./db/db.json", "utf8"));
+    let incomingNote = req.body;
+    let uniqueID = myNotes.length.toString();
+    incomingNote.id = uniqueID;
+    myNotes.push(incomingNote);
+  
+    fs.writeFileSync("./db/db.json", JSON.stringify(myNotes));
+  
+    res.json(myNotes);
+  });
   app.listen(port, function () {
     console.log(`Server listening on port ${port}.` );
   }); 
+
+
